@@ -27,10 +27,15 @@ st.title('Global Health Data Overview')
 
 # Create tabs for each visualization
 st.sidebar.title("Select Visualization")
-selected_viz = st.sidebar.radio("", ["Total Deaths by Country", "Top 5 Diseases in Lebanon", "Total Deaths in Lebanon Over the Years"])
+selected_viz = st.sidebar.radio("", ["Overview", "Total Deaths by Country", "Top 5 Diseases in Lebanon", "Total Deaths in Lebanon Over the Years"])
+
+# Overview Tab
+if selected_viz == "Overview":
+    st.write("This app shows different visuals related to the Causes of Deaths dataset from Kaggle, ranging from 1990 to 2019, worldwide.")
+    # Add an overview or description here.
 
 # Total Deaths by Country Tab
-if selected_viz == "Total Deaths by Country":
+elif selected_viz == "Total Deaths by Country":
     st.header('Total Deaths by Country from 1990 to 2019')
     fig = px.scatter(
         df,
