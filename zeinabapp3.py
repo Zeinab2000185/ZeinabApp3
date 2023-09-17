@@ -26,17 +26,14 @@ df['Total Deaths'] = df[Cause_of_death].sum(axis=1)
 # Create a Streamlit app
 st.title('Global Health Data Overview')
 
-# Define tabs
-tabs = st.tabs([
-    {"label": "Overview", "value": "overview"},
-    {"label": "Choropleth Map", "value": "choropleth_map"},
-])
+# Create a sidebar with tabs
+selected_tab = st.sidebar.radio("Select Tab:", ["Overview", "Choropleth Map"])
 
 # Overview Tab
-with tabs["overview"]:
+if selected_tab == "Overview":
     # Description
     st.write("This app shows different visuals related to the Causes of Deaths dataset from Kaggle, ranging from 1990 to 2019, worldwide.")
-
+    
     # Scatterplot by Country
     st.header('Total Deaths by Country from 1990 to 2019')
     fig = px.scatter(
@@ -74,7 +71,7 @@ with tabs["overview"]:
     st.plotly_chart(fig_lebanon)
 
 # Choropleth Map Tab
-with tabs["choropleth_map"]:
+elif selected_tab == "Choropleth Map":
     st.header('Cardiovascular Disease Deaths (1990-2019) Choropleth Map')
     fig_choropleth = px.choropleth(
         df,
