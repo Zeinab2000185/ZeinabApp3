@@ -6,6 +6,20 @@ from streamlit.components.v1 import components
 # Read the data
 df = pd.read_csv("cause_of_deaths.csv")
 
+# Define the list of causes of death
+Cause_of_death = ['Meningitis', "Alzheimer's Disease and Other Dementias", 'Parkinson\'s Disease',
+                  'Nutritional Deficiencies', 'Malaria', 'Drowning',
+                  'Interpersonal Violence', 'Maternal Disorders', 'HIV/AIDS',
+                  'Drug Use Disorders', 'Tuberculosis', 'Cardiovascular Diseases',
+                  'Lower Respiratory Infections', 'Neonatal Disorders',
+                  'Alcohol Use Disorders', 'Self-harm', 'Exposure to Forces of Nature',
+                  'Diarrheal Diseases', 'Environmental Heat and Cold Exposure',
+                  'Neoplasms', 'Conflict and Terrorism', 'Diabetes Mellitus',
+                  'Chronic Kidney Disease', 'Poisonings', 'Protein-Energy Malnutrition',
+                  'Road Injuries', 'Chronic Respiratory Diseases',
+                  'Cirrhosis and Other Chronic Liver Diseases', 'Digestive Diseases',
+                  'Fire, Heat, and Hot Substances', 'Acute Hepatitis']
+
 # Calculate the total deaths for each year
 df['Total Deaths'] = df[Cause_of_death].sum(axis=1)
 
