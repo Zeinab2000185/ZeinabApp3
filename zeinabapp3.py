@@ -22,12 +22,33 @@ Cause_of_death = ['Meningitis', "Alzheimer's Disease and Other Dementias", 'Park
 # Calculate the total deaths for each year
 df['Total Deaths'] = df[Cause_of_death].sum(axis=1)
 
+# List of disease column names
+disease_columns = ['Meningitis', "Alzheimer's Disease and Other Dementias", "Parkinson's Disease",
+                   'Nutritional Deficiencies', 'Malaria', 'Drowning', 'Interpersonal Violence',
+                   'Maternal Disorders', 'HIV/AIDS', 'Drug Use Disorders', 'Tuberculosis',
+                   'Cardiovascular Diseases', 'Lower Respiratory Infections', 'Neonatal Disorders',
+                   'Alcohol Use Disorders', 'Self-harm', 'Exposure to Forces of Nature',
+                   'Diarrheal Diseases', 'Environmental Heat and Cold Exposure', 'Neoplasms',
+                   'Conflict and Terrorism', 'Diabetes Mellitus', 'Chronic Kidney Disease', 'Poisonings',
+                   'Protein-Energy Malnutrition', 'Road Injuries', 'Chronic Respiratory Diseases',
+                   'Cirrhosis and Other Chronic Liver Diseases', 'Digestive Diseases',
+                   'Fire, Heat, and Hot Substances', 'Acute Hepatitis']
+
+# Sum 'Total Deaths' for each disease across all years
+disease_total_deaths = df[disease_columns].sum()
+
+# Creating a new DataFrame with disease names and their total deaths
+disease_data = pd.DataFrame({'Disease': disease_total_deaths.index, 'Total Deaths': disease_total_deaths.values})
+
+# Selecting the top 10 diseases by total deaths
+top_10_diseases = disease_data.nlargest(10, 'Total Deaths')
+
 # Create a Streamlit app
 st.title('Global Health Data Overview')
 
 # Create tabs for each visualization
 st.sidebar.title("Select Visualization")
-selected_viz = st.sidebar.radio("", ["Overview", "Total Deaths by Country", "Top 5 Diseases in Lebanon", "Total Deaths in Lebanon Over the Years", "Cardiovascular Disease Deaths Map"])
+selected_viz = st.sidebar.radio("", ["Overview", "Total Deaths by Country", "Top 5 Diseases in Lebanon", "Total Deaths in Lebanon Over the Years", "Cardiovascular Disease Deaths Map", "Top 10 Diseases by Total Deaths"])
 
 # Overview Tab
 if selected_viz == "Overview":
@@ -63,37 +84,4 @@ elif selected_viz == "Top 5 Diseases in Lebanon":
     # Sorting the diseases by total deaths in descending order and select the top 5
     top_5_diseases = lebanon_disease_deaths.sort_values(ascending=False).head(5)
 
-    st.header('Top 5 Diseases in Lebanon by Total Deaths')
-    fig_pie = px.pie(names=top_5_diseases.index, values=top_5_diseases)
-
-    # Customizing the layout
-    fig_pie.update_traces(textinfo='percent+label')
-
-    st.plotly_chart(fig_pie)
-
-# Total Deaths in Lebanon Over the Years Tab
-elif selected_viz == "Total Deaths in Lebanon Over the Years":
-    # Filtering data for Lebanon
-    lebanon_data = df[df['Country/Territory'] == 'Lebanon']
-
-    st.header('Total Deaths in Lebanon Over the Years')
-    fig_lebanon = px.scatter(lebanon_data, x='Year', y='Total Deaths', title='Total Deaths in Lebanon Over the Years')
-
-    st.plotly_chart(fig_lebanon)
-
-# Cardiovascular Disease Deaths Map Tab
-elif selected_viz == "Cardiovascular Disease Deaths Map":
-    st.header('Cardiovascular Disease Deaths (1990-2019) Map')
-    fig = px.choropleth(
-        df,
-        locations="Country/Territory",
-        locationmode="country names",
-        color="Cardiovascular Diseases",
-        animation_frame="Year",
-        color_continuous_scale="Viridis",
-        title="Cardiovascular Disease Deaths (1990-2019)",
-        hover_name="Country/Territory",
-        projection="natural earth"
-    )
-
-    st.plotly_chart(fig)
+    st.header('Top 5
