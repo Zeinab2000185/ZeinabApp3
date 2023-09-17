@@ -3,7 +3,7 @@ import plotly.express as px
 import streamlit as st
 
 # Read the data
-df = pd.read_csv("cause_of_deaths.csv")
+df = pd.read_csv("/content/cause_of_deaths.csv")
 
 # Define the list of causes of death
 Cause_of_death = ['Meningitis', "Alzheimer's Disease and Other Dementias", 'Parkinson\'s Disease',
@@ -37,12 +37,17 @@ if selected_viz == "Overview":
 # Total Deaths by Country Tab
 elif selected_viz == "Total Deaths by Country":
     st.header('Total Deaths by Country from 1990 to 2019')
+    
+    # Filter by country
+    country_filter = st.selectbox("Select a Country", df['Country/Territory'].unique())
+    
+    filtered_df = df[df['Country/Territory'] == country_filter]
+    
     fig = px.scatter(
-        df,
+        filtered_df,
         x='Year',
         y='Total Deaths',
-        color='Country/Territory',
-        title='Total Deaths by Country from 1990 to 2019',
+        title=f'Total Deaths by Country for {country_filter} from 1990 to 2019',
         labels={'Country/Territory': 'Country', 'Total Deaths': 'Total Deaths', 'Year': 'Year'},
     )
     st.plotly_chart(fig)
