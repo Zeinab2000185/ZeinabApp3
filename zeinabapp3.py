@@ -3,7 +3,7 @@ import plotly.express as px
 import streamlit as st
 
 # Read the data
-df = pd.read_csv("/content/cause_of_deaths.csv")
+df = pd.read_csv("cause_of_deaths.csv")
 
 # Define the list of causes of death
 Cause_of_death = ['Meningitis', "Alzheimer's Disease and Other Dementias", 'Parkinson\'s Disease',
