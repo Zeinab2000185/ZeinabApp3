@@ -48,15 +48,10 @@ st.title('Global Health Data Overview')
 
 # Create tabs for each visualization
 st.sidebar.title("Select Visualization")
-selected_viz = st.sidebar.radio("", ["Overview", "Total Deaths by Country", "Top 5 Diseases in Lebanon", "Total Deaths in Lebanon Over the Years", "Cardiovascular Disease Deaths Map", "Top 10 Diseases by Total Deaths"])
-
-# Overview Tab
-if selected_viz == "Overview":
-    st.write("This app shows different visuals related to the Causes of Deaths dataset from Kaggle, ranging from 1990 to 2019, worldwide.")
-    # Add an overview or description here.
+selected_viz = st.sidebar.radio("", ["Total Deaths by Country", "Top 10 Diseases by Total Deaths", "Cardiovascular Disease Deaths Map", "Top 5 Diseases in Lebanon", "Total Deaths in Lebanon Over the Years"])
 
 # Total Deaths by Country Tab
-elif selected_viz == "Total Deaths by Country":
+if selected_viz == "Total Deaths by Country":
     st.header('Total Deaths by Country from 1990 to 2019')
     
     # Filter by country
@@ -70,6 +65,36 @@ elif selected_viz == "Total Deaths by Country":
         y='Total Deaths',
         title=f'Total Deaths by Country for {country_filter} from 1990 to 2019',
         labels={'Country/Territory': 'Country', 'Total Deaths': 'Total Deaths', 'Year': 'Year'},
+    )
+    st.plotly_chart(fig)
+
+# Top 10 Diseases by Total Deaths Tab
+elif selected_viz == "Top 10 Diseases by Total Deaths":
+    st.header('Top 10 Diseases by Total Deaths')
+    fig = px.scatter(
+        top_10_diseases,
+        x='Disease',
+        y='Total Deaths',
+        color='Disease',  # Color by disease
+        color_discrete_sequence=px.colors.qualitative.Set1,
+        title='Top 10 Diseases by Total Deaths',
+        labels={'Disease': 'Disease', 'Total Deaths': 'Total Deaths'},
+    )
+    st.plotly_chart(fig)
+
+# Cardiovascular Disease Deaths Map Tab
+elif selected_viz == "Cardiovascular Disease Deaths Map":
+    st.header('Cardiovascular Disease Deaths (1990-2019) Map')
+    fig = px.choropleth(
+        df,
+        locations="Country/Territory",
+        locationmode="country names",
+        color="Cardiovascular Diseases",
+        animation_frame="Year",
+        color_continuous_scale="Viridis",
+        title="Cardiovascular Disease Deaths (1990-2019)",
+        hover_name="Country/Territory",
+        projection="natural earth"
     )
     st.plotly_chart(fig)
 
@@ -101,34 +126,3 @@ elif selected_viz == "Total Deaths in Lebanon Over the Years":
     fig_lebanon = px.scatter(lebanon_data, x='Year', y='Total Deaths', title='Total Deaths in Lebanon Over the Years')
 
     st.plotly_chart(fig_lebanon)
-
-# Cardiovascular Disease Deaths Map Tab
-elif selected_viz == "Cardiovascular Disease Deaths Map":
-    st.header('Cardiovascular Disease Deaths (1990-2019) Map')
-    fig = px.choropleth(
-        df,
-        locations="Country/Territory",
-        locationmode="country names",
-        color="Cardiovascular Diseases",
-        animation_frame="Year",
-        color_continuous_scale="Viridis",
-        title="Cardiovascular Disease Deaths (1990-2019)",
-        hover_name="Country/Territory",
-        projection="natural earth"
-    )
-
-    st.plotly_chart(fig)
-
-# Top 10 Diseases by Total Deaths Tab
-elif selected_viz == "Top 10 Diseases by Total Deaths":
-    st.header('Top 10 Diseases by Total Deaths')
-    fig = px.scatter(
-        top_10_diseases,
-        x='Disease',
-        y='Total Deaths',
-        color='Disease',  # Color by disease
-        color_discrete_sequence=px.colors.qualitative.Set1,
-        title='Top 10 Diseases by Total Deaths',
-        labels={'Disease': 'Disease', 'Total Deaths': 'Total Deaths'},
-    )
-    st.plotly_chart(fig)
