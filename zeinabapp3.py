@@ -4,7 +4,7 @@ import streamlit as st
 from streamlit.components.v1 import components
 
 # Read the data
-df = pd.read_csv("/content/cause_of_deaths.csv")
+df = pd.read_csv("cause_of_deaths.csv")
 
 # Calculate the total deaths for each year
 df['Total Deaths'] = df[Cause_of_death].sum(axis=1)
