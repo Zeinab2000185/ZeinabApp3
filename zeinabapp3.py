@@ -84,4 +84,51 @@ elif selected_viz == "Top 5 Diseases in Lebanon":
     # Sorting the diseases by total deaths in descending order and select the top 5
     top_5_diseases = lebanon_disease_deaths.sort_values(ascending=False).head(5)
 
-    st.header('Top 5
+    st.header('Top 5 Diseases in Lebanon by Total Deaths')
+    fig_pie = px.pie(names=top_5_diseases.index, values=top_5_diseases)
+
+    # Customizing the layout
+    fig_pie.update_traces(textinfo='percent+label')
+
+    st.plotly_chart(fig_pie)
+
+# Total Deaths in Lebanon Over the Years Tab
+elif selected_viz == "Total Deaths in Lebanon Over the Years":
+    # Filtering data for Lebanon
+    lebanon_data = df[df['Country/Territory'] == 'Lebanon']
+
+    st.header('Total Deaths in Lebanon Over the Years')
+    fig_lebanon = px.scatter(lebanon_data, x='Year', y='Total Deaths', title='Total Deaths in Lebanon Over the Years')
+
+    st.plotly_chart(fig_lebanon)
+
+# Cardiovascular Disease Deaths Map Tab
+elif selected_viz == "Cardiovascular Disease Deaths Map":
+    st.header('Cardiovascular Disease Deaths (1990-2019) Map')
+    fig = px.choropleth(
+        df,
+        locations="Country/Territory",
+        locationmode="country names",
+        color="Cardiovascular Diseases",
+        animation_frame="Year",
+        color_continuous_scale="Viridis",
+        title="Cardiovascular Disease Deaths (1990-2019)",
+        hover_name="Country/Territory",
+        projection="natural earth"
+    )
+
+    st.plotly_chart(fig)
+
+# Top 10 Diseases by Total Deaths Tab
+elif selected_viz == "Top 10 Diseases by Total Deaths":
+    st.header('Top 10 Diseases by Total Deaths')
+    fig = px.scatter(
+        top_10_diseases,
+        x='Disease',
+        y='Total Deaths',
+        color='Disease',  # Color by disease
+        color_discrete_sequence=px.colors.qualitative.Set1,
+        title='Top 10 Diseases by Total Deaths',
+        labels={'Disease': 'Disease', 'Total Deaths': 'Total Deaths'},
+    )
+    st.plotly_chart(fig)
