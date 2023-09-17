@@ -27,7 +27,7 @@ st.title('Global Health Data Overview')
 
 # Create tabs for each visualization
 st.sidebar.title("Select Visualization")
-selected_viz = st.sidebar.radio("", ["Overview", "Total Deaths by Country", "Top 5 Diseases in Lebanon", "Total Deaths in Lebanon Over the Years"])
+selected_viz = st.sidebar.radio("", ["Overview", "Total Deaths by Country", "Top 5 Diseases in Lebanon", "Total Deaths in Lebanon Over the Years", "Cardiovascular Disease Deaths Map"])
 
 # Overview Tab
 if selected_viz == "Overview":
@@ -75,3 +75,20 @@ elif selected_viz == "Total Deaths in Lebanon Over the Years":
     fig_lebanon = px.scatter(lebanon_data, x='Year', y='Total Deaths', title='Total Deaths in Lebanon Over the Years')
 
     st.plotly_chart(fig_lebanon)
+
+# Cardiovascular Disease Deaths Map Tab
+elif selected_viz == "Cardiovascular Disease Deaths Map":
+    st.header('Cardiovascular Disease Deaths (1990-2019) Map')
+    fig = px.choropleth(
+        df,
+        locations="Country/Territory",
+        locationmode="country names",
+        color="Cardiovascular Diseases",
+        animation_frame="Year",
+        color_continuous_scale="Viridis",
+        title="Cardiovascular Disease Deaths (1990-2019)",
+        hover_name="Country/Territory",
+        projection="natural earth"
+    )
+
+    st.plotly_chart(fig)
