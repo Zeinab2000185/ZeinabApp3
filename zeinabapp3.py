@@ -22,6 +22,18 @@ Cause_of_death = ['Meningitis', "Alzheimer's Disease and Other Dementias", 'Park
 # Calculate the total deaths for each year
 df['Total Deaths'] = df[Cause_of_death].sum(axis=1)
 
+# List of disease column names
+disease_columns = Cause_of_death
+
+# Sum 'Total Deaths' for each disease across all years
+disease_total_deaths = df[disease_columns].sum()
+
+# Creating a new DataFrame with disease names and their total deaths
+disease_data = pd.DataFrame({'Disease': disease_columns, 'Total Deaths': disease_total_deaths})
+
+# Selecting the top 10 diseases by total deaths
+top_10_diseases = disease_data.nlargest(10, 'Total Deaths')
+
 # Create a Streamlit app
 st.title('Global Health Data Overview')
 
