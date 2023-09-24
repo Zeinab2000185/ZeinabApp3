@@ -122,6 +122,15 @@ elif selected_viz == "Total Deaths in Lebanon Over the Years":
     lebanon_data = df[df['Country/Territory'] == 'Lebanon']
 
     st.header('Total Deaths in Lebanon Over the Years')
-    fig_lebanon = px.scatter(lebanon_data, x='Year', y='Total Deaths', title='Total Deaths in Lebanon Over the Years')
+    
+    # Create a year slider
+    year_range = st.slider("Select Year Range", min_value=1990, max_value=2019, value=(1990, 2019))
+    
+    # Filter data based on the selected year range
+    filtered_lebanon_data = lebanon_data[(lebanon_data['Year'] >= year_range[0]) & (lebanon_data['Year'] <= year_range[1])]
+    
+    fig_lebanon = px.scatter(
+        filtered_lebanon_data, x='Year', y='Total Deaths', title='Total Deaths in Lebanon Over the Years'
+    )
 
     st.plotly_chart(fig_lebanon)
