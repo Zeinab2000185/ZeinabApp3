@@ -48,24 +48,26 @@ if selected_viz == "Total Deaths by Country":
     # Define the list of countries
     countries = df['Country/Territory'].unique()
     
-    # Create tabs for each country
-    selected_countries = st.sidebar.multiselect("Select Countries", countries, countries[:5])  # Default to the first 5 countries
+    # Create a multi-select box to choose countries
+    selected_countries = st.sidebar.multiselect("Select Countries", countries, countries[:5])
     
-    # Iterate through selected countries and display data
-    for country_filter in selected_countries:
-        filtered_df = df[df['Country/Territory'] == country_filter]
+    # Filter the DataFrame based on selected countries
+    filtered_df = df[df['Country/Territory'].isin(selected_countries)]
+    
+    # Create a line chart showing total deaths by country over the years
+    fig = px.line(
+        filtered_df,
+        x='Year',
+        y='Total Deaths',
+        color='Country/Territory',
+        title='Total Deaths by Country from 1990 to 2019',
+        labels={'Country/Territory': 'Country', 'Total Deaths': 'Total Deaths', 'Year': 'Year'},
+    )
+    
+    st.plotly_chart(fig)
+
         
-        fig = px.scatter(
-            filtered_df,
-            x='Year',
-            y='Total Deaths',
-            color='Country/Territory',  # Color by country
-            title=f'Total Deaths by Country for {country_filter} from 1990 to 2019',
-            labels={'Country/Territory': 'Country', 'Total Deaths': 'Total Deaths', 'Year': 'Year'},
-        )
-        
-        st.subheader(f'Data for {country_filter}')
-        st.plotly_chart(fig)
+    
 
 # Top 10 Diseases by Total Deaths Tab
 elif selected_viz == "Top 10 Diseases by Total Deaths":
