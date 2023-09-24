@@ -22,27 +22,6 @@ Cause_of_death = ['Meningitis', "Alzheimer's Disease and Other Dementias", 'Park
 # Calculate the total deaths for each year
 df['Total Deaths'] = df[Cause_of_death].sum(axis=1)
 
-# List of disease column names
-disease_columns = ['Meningitis', "Alzheimer's Disease and Other Dementias", "Parkinson's Disease",
-                   'Nutritional Deficiencies', 'Malaria', 'Drowning', 'Interpersonal Violence',
-                   'Maternal Disorders', 'HIV/AIDS', 'Drug Use Disorders', 'Tuberculosis',
-                   'Cardiovascular Diseases', 'Lower Respiratory Infections', 'Neonatal Disorders',
-                   'Alcohol Use Disorders', 'Self-harm', 'Exposure to Forces of Nature',
-                   'Diarrheal Diseases', 'Environmental Heat and Cold Exposure', 'Neoplasms',
-                   'Conflict and Terrorism', 'Diabetes Mellitus', 'Chronic Kidney Disease', 'Poisonings',
-                   'Protein-Energy Malnutrition', 'Road Injuries', 'Chronic Respiratory Diseases',
-                   'Cirrhosis and Other Chronic Liver Diseases', 'Digestive Diseases',
-                   'Fire, Heat, and Hot Substances', 'Acute Hepatitis']
-
-# Sum 'Total Deaths' for each disease across all years
-disease_total_deaths = df[disease_columns].sum()
-
-# Creating a new DataFrame with disease names and their total deaths
-disease_data = pd.DataFrame({'Disease': disease_total_deaths.index, 'Total Deaths': disease_total_deaths.values})
-
-# Selecting the top 10 diseases by total deaths
-top_10_diseases = disease_data.nlargest(10, 'Total Deaths')
-
 # Create a Streamlit app
 st.title('Global Health Data Overview')
 
@@ -54,19 +33,27 @@ selected_viz = st.sidebar.radio("", ["Total Deaths by Country", "Top 10 Diseases
 if selected_viz == "Total Deaths by Country":
     st.header('Total Deaths by Country from 1990 to 2019')
     
-    # Filter by country
-    country_filter = st.selectbox("Select a Country", df['Country/Territory'].unique())
+    # Define the list of countries
+    countries = df['Country/Territory'].unique()
     
-    filtered_df = df[df['Country/Territory'] == country_filter]
+    # Create tabs for each country
+    selected_countries = st.sidebar.multiselect("Select Countries", countries, countries[:5])  # Default to the first 5 countries
     
-    fig = px.scatter(
-        filtered_df,
-        x='Year',
-        y='Total Deaths',
-        title=f'Total Deaths by Country for {country_filter} from 1990 to 2019',
-        labels={'Country/Territory': 'Country', 'Total Deaths': 'Total Deaths', 'Year': 'Year'},
-    )
-    st.plotly_chart(fig)
+    # Iterate through selected countries and display data
+    for country_filter in selected_countries:
+        filtered_df = df[df['Country/Territory'] == country_filter]
+        
+        fig = px.scatter(
+            filtered_df,
+            x='Year',
+            y='Total Deaths',
+            color='Country/Territory',  # Color by country
+            title=f'Total Deaths by Country for {country_filter} from 1990 to 2019',
+            labels={'Country/Territory': 'Country', 'Total Deaths': 'Total Deaths', 'Year': 'Year'},
+        )
+        
+        st.subheader(f'Data for {country_filter}')
+        st.plotly_chart(fig)
 
 # Top 10 Diseases by Total Deaths Tab
 elif selected_viz == "Top 10 Diseases by Total Deaths":
